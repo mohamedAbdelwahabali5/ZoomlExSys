@@ -24,7 +24,7 @@
       <nav class="navbar navbar-expand-lg navbar-light bg-light py-4">
         <div class="container">
           <a class="navbar-brand" href="#">
-            <h1 class="sitename">zoomlExSys</h1>
+            <h1 class="sitename">ZoomlExSys</h1>
           </a>
           <button
             class="navbar-toggler"
@@ -275,7 +275,7 @@
         <div class="container d-flex align-items-center justify-content-center">
           <div class="row justify-content-center text-center p-5 w-100 mt-5">
             <div id="prof-image" class="col-12 mb-4 mt-5">
-              <h1 class="mb-3">Result</h1>
+              <h2 class="mb-3">Result</h2>
               <div class="d-flex justify-content-center">
                 <img
                   src="./images/fail.svg"
@@ -394,7 +394,54 @@
           </div>
         </div>
       </section>
-      
+
+      <!-- Quiz section -->
+      <section class="quiz" id="quiz">
+        <div class="container-fluid bg-success bg-opacity-25 min-vh-100 d-flex align-items-center justify-content-center p-4 mt-5">
+          <div class="bg-white rounded shadow-lg p-4 w-100 mt-5" style="max-width: 800px;">
+            <div class="row">
+              <!-- Marked Questions (Left Side) -->
+             
+        
+              <!-- Quiz Content (Right Side) -->
+              <div class="col-md-8">
+                <div class="bg-warning text-white text-center p-2 rounded fw-bold fs-4 mb-4">
+                  04:25
+                </div>
+                
+                <div class="mb-4">
+                  <h5 class="fw-bold">Choose the correct answer</h5>
+                  <p>The basic building blocks of HTML are called _____.</p>
+                </div>
+        
+                <div class="d-grid gap-2 mb-4">
+                  <button class="btn btn-outline-secondary text-start p-2">classes</button>
+                  <button class="btn btn-outline-secondary text-start p-2">selectors</button>
+                  <button class="btn btn-outline-secondary text-start p-2">properties</button>
+                  <button class="btn btn-outline-secondary text-start p-2">elements</button>
+                </div>
+        
+                <div class="d-flex justify-content-between align-items-center">
+                  <button class="btn btn-secondary">&larr;</button>
+                  <span>1 out of 6</span>
+                  <button class="btn btn-secondary">&rarr;</button>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="bg-warning bg-opacity-25 p-3 rounded">
+                  <h6 class="fw-bold mb-3">Marked Questions</h6>
+                  <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      Question 1
+                      <button class="btn btn-sm text-danger border-0">🗑️</button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer id="footer" class="footer light-background py-5">
