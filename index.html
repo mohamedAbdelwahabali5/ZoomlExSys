@@ -292,10 +292,84 @@
         </div>
       </div>
     </section>
+    <section class="quiz-section py-5 mt-5">
+      <div class="container mt-5">
+        <h2 class="text-center mb-4">General Knowledge Quiz</h2>
+        <div class="row">
+          <div class="col-8">
+            <div class="quiz-card  col-sm-12 p-4 d-flex justify-content-between">
+              <div>
+                <h5>1. What is the most abundant gas in the Earth's atmosphere?</h5>
+              </div>
+              <button class="btn flag-btn" title="Flag this question">
+                <i class="bi bi-flag"></i>
+              </button>
+            </div>
+            <form class="p-3">
+              <label class="form-check">
+                <input class="form-check-input" type="radio" name="answer" id="option1">
+                <span class="form-check-label">Nitrogen</span>
+              </label>
+              
+              <label class="form-check">
+                <input class="form-check-input" type="radio" name="answer" id="option2">
+                <span class="form-check-label">Helium</span>
+              </label>
+              
+              <label class="form-check">
+                <input class="form-check-input" type="radio" name="answer" id="option3">
+                <span class="form-check-label">Oxygen</span>
+              </label>
+              
+              <label class="form-check">
+                <input class="form-check-input" type="radio" name="answer" id="option4">
+                <span class="form-check-label">Carbon Dioxide</span>
+              </label>
+            </form>
+            
+            
+            <div class="container d-flex justify-content-center align-items-center gap-3 ">
+              <div class="col-8 d-flex justify-content-center align-items-center gap-2">
+                <!-- Previous Button -->
+                <button type="button" class="btn quiz-nav" title="Go to Previous">
+                  <i class="bi bi-arrow-left"></i>
+                </button>
+                <!-- Next Button -->
+                <button type="button" class="btn quiz-nav" title="Go to Next">
+                  <i class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+              <!-- Submit Button -->
+              <div class="col-4 d-flex justify-content-end">
+                <button type="submit" class="btn-submit ms-auto" title="Submit Exam">
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <!-- Flagged Questions Section -->
+            <div class="flagged-questions ">
+              <h5>Flagged Questions</h5>
+              <ul id="flagged-list">
+                <li>
+                  First question 
+                  <button class="btn btn-link text-danger" title="Remove this question">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </li>
+               
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
   </main>
 
-  <footer id="footer" class="footer light-background py-5" style="display: none;">
+  <footer id="footer" class="footer light-background py-5" style="display: block;">
     <div class="container">
       <h4 class="sitename">ZoomlExSys</h4>
       Zoom in on your goals, Explore new possibilities, and Energize your journey!
