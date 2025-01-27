@@ -31,18 +31,20 @@ function showErr(fieldId, msg) {
   if (!$(`#${fieldId}`).next(".err").length) {
     // check if no err after feildid to prevent dupliction of err
     $(`#${fieldId}`).after(`<span class="err text-danger">${msg}</span>`);
+  } else {
+    $(`#${fieldId}`).next(".err").text(msg);
   }
 }
 
 function clearErr(fieldId) {
-  $(`#${fieldId}`).next(".error").remove(); // remove next for feild id
+  $(`#${fieldId}`).next(".err").remove(); // remove next for feild id
 }
 
-function validateEmail(email) {
-  //i put it in functio because if found myself pass regext on if condition
-  let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-}
+// function validateEmail(email) {
+//   //i put it in function because if found myself pass regext on if condition
+//   let regex =
+//   return regex.test(email);
+// }
 
 function inputValidation(input) {
   let fieldId = input.attr("id"); // get id attribute for eact input
@@ -66,21 +68,31 @@ function inputValidation(input) {
       break;
     case "signupEmail":
     case "signinEmail":
+      let emailRegex =
+        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       if (!val) {
         showErr(fieldId, "Email is required");
         isValid = false;
-      } else if (!validateEmail(val)) {
+      } else if (!emailRegex.test(val)) {
         showErr(fieldId, "Invalid email format");
         isValid = false;
-      } else clearErr(fieldId);
+      } else {
+        clearErr(fieldId);
+      }
       break;
     case "signupPassword":
     case "signinPassword":
+      let passRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
       if (!val) {
         showErr(fieldId, "Password is required.");
         isValid = false;
-      } else if (val.length < 8) {
-        showErr(fieldId, "Password must be at least 8 characters.");
+      } else if (!passRegex.test(val)) {
+        showErr(
+          fieldId,
+          "Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, one digit, and one special character."
+        );
         isValid = false;
       } else {
         clearErr(fieldId);
@@ -101,6 +113,7 @@ function inputValidation(input) {
 }
 
 function formValidation(form) {
+  $(".err").remove();
   let isValid = true;
   let inputs = {
     signup: [
@@ -114,7 +127,7 @@ function formValidation(form) {
   };
 
   inputs[form].forEach((input) => {
-    isValid = isValid && inputValidation($(input)); // don't for get to pass it byid # so $(field)
+    isValid = isValid && inputValidation($(input)); // don't forget to pass it byid # so $(field)
   });
   return isValid;
 }
@@ -125,18 +138,32 @@ $(document).ready(function () {
   $("#signin").hide();
 
   // Show section based on button clicked
-  $(".toggle-section").on("click", function (event) {
-    event.preventDefault(); // Prevent default link behavior
+  $(".toggle-section").on("click", function (e) {
+    e.preventDefault(); // Prevent default link behavior
     const targetSection = $(this).data("target");
     $("#hero").hide();
     $("#signup, #signin").hide();
+
+    $(".err").remove(); // for remve err msg if i navigate between login and signup
+
+    // for reseting forms
+    $("#signupForm").trigger("reset");
+    $("#signinForm").trigger("reset");
     $(targetSection).show();
   });
 
+  $("#signup input, #signin input").on("blur", function () {
+    inputValidation($(this));
+  });
   $("#signup form").on("submit", function (e) {
     e.preventDefault();
     if (formValidation("signup")) {
       console.log("signuup success");
+    } else {
+      // Trigger validation for all inputs to ensure errors are displayed
+      $("#signup input").each(function () {
+        inputValidation($(this));
+      });
     }
   });
 
@@ -144,6 +171,11 @@ $(document).ready(function () {
     e.preventDefault();
     if (formValidation("signin")) {
       console.log("signin success");
+    } else {
+      // Trigger validation for all inputs to ensure errors are displayed
+      $("#signin input").each(function () {
+        inputValidation($(this));
+      });
     }
   });
 });
