@@ -56,8 +56,12 @@ function inputValidation(input) {
   switch (fieldId) {
     case "signupFirstName":
     case "signupLastName":
+      let nameRegex = /^[a-zA-Z]+$/;
       if (!val) {
         showErr(fieldId, "this feild is required");
+        isValid = false;
+      } else if (!nameRegex.test(val)) {
+        showErr(fieldId, "Name must contain only letters (no spaces)");
         isValid = false;
       } else if (val.length < 3 || val.length > 12) {
         showErr(fieldId, "name must be between 3 and 12 characters");
