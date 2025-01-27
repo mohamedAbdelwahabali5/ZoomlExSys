@@ -14,6 +14,11 @@
     integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="script.js" defer></script>
+  <!-- Include SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <!-- Include SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <title>ZoomlExSys</title>
 </head>
 
@@ -91,29 +96,23 @@
               </div>
               <div class="col-12">
                 <label for="signupLastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="signupLastName" placeholder="Last Name"  />
+                <input type="text" class="form-control" id="signupLastName" placeholder="Last Name" />
               </div>
               <div class="col-12">
                 <label for="signupEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="signupEmail" placeholder="Email" autocomplete="username"
-                   />
+                <input type="email" class="form-control" id="signupEmail" placeholder="Email" autocomplete="username" />
               </div>
               <div class="col-12">
                 <label for="signupPassword" class="form-label">Password</label>
                 <input type="password" class="form-control" id="signupPassword" placeholder="Password"
-                  autocomplete="new-password"  />
+                  autocomplete="new-password" />
               </div>
               <div class="col-12">
                 <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" id="signupConfirmPassword" placeholder="Confirm Password"
-                  autocomplete="current-password"/>
+                  autocomplete="current-password" />
               </div>
-              <div class="col-12">
-                <div class="remember-check">
-                  <input class="remember-check-input" type="checkbox" id="signupRememberMe" />
-                  <label class="form-check-label" for="signupRememberMe">Remember me</label>
-                </div>
-              </div>
+
               <div class="col-12">
                 <button type="submit" class="btn">Sign Up</button>
               </div>
@@ -147,8 +146,7 @@
             <form id="signinForm" class="row g-3">
               <div class="col-12">
                 <label for="signinEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="signinEmail" placeholder="Email" autocomplete="username"
-                  />
+                <input type="email" class="form-control" id="signinEmail" placeholder="Email" autocomplete="username" />
               </div>
               <div class="col-12">
                 <label for="signinPassword" class="form-label">Password</label>
@@ -303,8 +301,8 @@
           </div>
         </div>
       </div>
-    </section>  <!-- Quiz Section -->
-    <section id="quiz-section"  class="quiz-section py-5 mt-5">
+    </section> <!-- Quiz Section -->
+    <section id="quiz-section" class="quiz-section py-5 mt-5">
       <div class="container mt-5">
         <h2 class="text-center mb-4">General Knowledge Quiz</h2>
         <div class="row">
@@ -411,7 +409,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="theme.js"></script>
   <script src="script.js"></script>
-    <!-- script for test -->
+  <!-- script for test -->
   <script>
     const startExamBtn = document.getElementById("start-ex-btn");
     const timer = document.getElementById("timer");
@@ -435,7 +433,3 @@
     })
   </script>
 </body>
-
-
-  
- 
