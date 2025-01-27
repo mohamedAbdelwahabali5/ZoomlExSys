@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="script.js" defer></script>
   <title>ZoomlExSys</title>
 </head>
 
@@ -17,7 +19,7 @@
   <header id="header" class="header fixed-top">
     <nav class="navbar navbar-expand-lg navbar-light bg-light py-4">
       <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
           <h1 class="sitename">zoomlExSys</h1>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -27,7 +29,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#hero">Home</a>
+              <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#about">About</a>
@@ -56,8 +58,8 @@
                 <span class="typed">Online Exam Platform</span>
               </p>
               <div class="d-flex justify-content-start gap-3">
-                <a href="" class="btn">Sign Up</a>
-                <a href="" class="btn">Sign In</a>
+                <a class="btn toggle-section" id="sign-up" data-target="#signup">Sign Up</a>
+                <a class="btn toggle-section" id="sign-in" data-target="#signin">Login</a>
               </div>
             </div>
           </div>
@@ -79,40 +81,41 @@
           <!-- Form Section -->
           <div class="image-bg col-sm-12 col-md-5 mt-5">
             <h1>Create an account</h1>
-            <form class="row g-3">
-              <div class="col-12">
-                <label for="inputFirstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" />
-              </div>
-              <div class="col-12">
-                <label for="inputLastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" />
-              </div>
-              <div class="col-12">
-                <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail4" placeholder="Email" />
-              </div>
-              <div class="col-12">
-                <label for="inputPassword4" class="form-label">Password</label>
-                <input type="password" class="form-control" id="inputPassword4" placeholder="Password" />
-              </div>
-              <div class="col-12">
-                <label for="inputPassword5" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="inputPassword5" placeholder="Confirm Password" />
-              </div>
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="gridCheck" />
-                  <label class="form-check-label" for="gridCheck">Remember me</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <button type="submit" class="btn">Sign Up</button>
-              </div>
-            </form>
+          <!-- Sign Up Form -->
+<form class="row g-3">
+  <div class="col-12">
+    <label for="signupFirstName" class="form-label">First Name</label>
+    <input type="text" class="form-control" id="signupFirstName" placeholder="First Name" required />
+  </div>
+  <div class="col-12">
+    <label for="signupLastName" class="form-label">Last Name</label>
+    <input type="text" class="form-control" id="signupLastName" placeholder="Last Name" required />
+  </div>
+  <div class="col-12">
+    <label for="signupEmail" class="form-label">Email</label>
+    <input type="email" class="form-control" id="signupEmail" placeholder="Email" autocomplete="username" required />
+  </div>
+  <div class="col-12">
+    <label for="signupPassword" class="form-label">Password</label>
+    <input type="password" class="form-control" id="signupPassword" placeholder="Password" autocomplete="new-password" required />
+  </div>
+  <div class="col-12">
+    <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+    <input type="password" class="form-control" id="signupConfirmPassword" placeholder="Confirm Password" autocomplete="current-password" required />
+  </div>
+  <div class="col-12">
+    <div class="remember-check">
+      <input class="remember-check-input" type="checkbox" id="signupRememberMe" />
+      <label class="form-check-label" for="signupRememberMe">Remember me</label>
+    </div>
+  </div>
+  <div class="col-12">
+    <button type="submit" class="btn">Sign Up</button>
+  </div>
+</form>
             <div>
               <p class="py-4">
-                Already have an account? <a href="#">Sign in</a>
+                Already have an account? <a class="toggle-section" href="#" data-target="#signin" id="sign-in2">Login</a>
               </p>
             </div>
           </div>
@@ -134,29 +137,29 @@
           <!-- Form Section -->
           <div class="image-bg col-sm-12 col-md-5 mt-5">
             <h1 class="mb-3">SignIn</h1>
-            <form class="row g-3">
-              <div class="col-12">
-                <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail4" placeholder="Email" />
-              </div>
-              <div class="col-12">
-                <label for="inputPassword4" class="form-label">Password</label>
-                <input type="password" class="form-control" id="inputPassword4" placeholder="Password" />
-              </div>
-
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="gridCheck" />
-                  <label class="form-check-label" for="gridCheck">Remember me</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <button type="submit" class="btn btn-primary">Sign In</button>
-              </div>
-            </form>
+          <!-- Sign In Form -->
+<form class="row g-3">
+  <div class="col-12">
+    <label for="signinEmail" class="form-label">Email</label>
+    <input type="email" class="form-control" id="signinEmail" placeholder="Email" autocomplete="username" required />
+  </div>
+  <div class="col-12">
+    <label for="signinPassword" class="form-label">Password</label>
+    <input type="password" class="form-control" id="signinPassword" placeholder="Password" autocomplete="current-password" required />
+  </div>
+  <div class="col-12">
+    <div class="remember-check">
+      <input class="remember-check-input" type="checkbox" id="signinRememberMe" />
+      <label class="form-check-label" for="signinRememberMe">Remember me</label>
+    </div>
+  </div>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Login</button>
+  </div>
+</form>
             <div>
               <p class="py-3">
-                Don't have an account? <a href="#">Sign up</a>
+                Don't have an account? <a id="sign-up2"class="toggle-section" href="#" data-target="#signup">Sign up</a>
               </p>
             </div>
           </div>
@@ -292,7 +295,7 @@
         </div>
       </div>
     </section>
-    <section class="quiz-section py-5 mt-5">
+    <section id="quiz-section" class="quiz-section py-5 mt-5">
       <div class="container mt-5">
         <h2 class="text-center mb-4">General Knowledge Quiz</h2>
         <div class="row">
@@ -393,6 +396,7 @@
     integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="theme.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>

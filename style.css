@@ -289,7 +289,7 @@ main {
 }
 
 #hero {
-  display: none;
+  display: block;
 }
 
 /* Footer */
@@ -630,7 +630,7 @@ main {
   width: 16px; /* Adjusts the size of the radio button */
   height: 16px;
   border: 1px solid rgb(94, 5, 171);
-  opacity: 0; /* hide radion btn*/
+  opacity: 0; 
 }
 
 .form-check-input:checked {
@@ -690,8 +690,8 @@ main {
   transform: scale(1.1);
 }
 
-#quiz-sec {
-  display: block;
+#quiz-section {
+  display: none;
 }
 
 .flag-btn {
@@ -736,4 +736,11 @@ main {
   justify-content: space-between; /* Space between question and trash icon */
   align-items: center; /* Center vertically */
   margin-bottom: 5px; /* Space between items */
+}
+
+.error {
+  display: block;
+  font-size: 0.875rem;
+  color: #dc3545; /* Red color for errors */
+  margin-top: 0.25rem;
 }
