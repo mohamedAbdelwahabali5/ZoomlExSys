@@ -59,7 +59,6 @@
   --primary-hover: #41066a;
 }
 
-
 * {
   margin: 0;
   padding: 0;
@@ -69,6 +68,7 @@
   transition: background-color 0.1s ease, color 0.1s ease;
 }
 
+/* General Styles for differant*/
 /*Custom Styles */
 .vh-50 {
   height: 50vh !important;
@@ -78,8 +78,47 @@
   max-width: 600px;
 }
 
+.min-vh-50 {
+  min-height: 50vh !important;
+}
 
-/*End  Custom Styles */
+/*End  Custom Styles *
+/* Responsive adjustments for font size*/
+@media (max-width: 577px) {
+  .fs-sm-4 {
+    font-size: 1.5rem !important;
+  }
+
+  .fs-sm-3 {
+    font-size: 2rem !important;
+  }
+
+  .fs-sm-2 {
+    font-size: 2.5rem !important;
+  }
+
+  .fs-sm-5 {
+    font-size: 1rem !important;
+  }
+}
+
+@media (min-width: 577px) {
+  .fs-md-4 {
+    font-size: 1.5rem !important;
+  }
+
+  .fs-md-3 {
+    font-size: 2rem !important;
+  }
+
+  .fs-md-2 {
+    font-size: 2.5rem !important;
+  }
+
+  .fs-md-5 {
+    font-size: 1rem !important;
+  }
+}
 
 /* General Styles */
 body {
@@ -104,7 +143,7 @@ main {
   width: 100%;
 }
 
-/* Navbar Style*/
+/* Navbar */
 .navbar {
   background-color: var(--surface-color) !important;
   border-bottom: 1px solid var(--border-color);
@@ -148,7 +187,7 @@ main {
   filter: invert(1) brightness(2);
 }
 
-/* Hero Section Style*/
+/* Hero Section */
 .hero {
   background: url("images/home-page.png");
   background-size: 70%;
@@ -205,7 +244,6 @@ main {
   box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
 }
 
-
 @media (max-width: 991.98px) {
   .hero {
     background-position: right 50%;
@@ -229,11 +267,8 @@ main {
     /* Hide background image on mobile */
     background-image: none;
     background-size: 90%;
-    padding: 60px 0;
-  }
 
-  .min-vh-100 {
-    min-height: 50vh !important;
+    padding: 60px 0;
   }
 
   .hero::before {
@@ -263,7 +298,6 @@ main {
   }
 }
 
-
 @media (max-width: 375.98px) {
   .hero h2 {
     font-size: 1.8rem;
@@ -276,8 +310,10 @@ main {
   .start-ex .btn,
   .hero .btn {
     display: block;
+    font-size: 0.6rem;
+
     margin: 10px auto;
-    padding: 15px;
+    max-width: 100px;
   }
 }
 
@@ -295,7 +331,6 @@ main {
         rgba(46, 16, 101, 0.95) 100%);
   }
 }
-
 
 #hero {
   display: none;
@@ -352,9 +387,8 @@ main {
   color: var(--heading-color);
 }
 
-
-
 /* Signup / signin Section Styles */
+
 .auth-section {
   height: 50%;
   margin: 20px;
@@ -448,27 +482,43 @@ main {
   }
 }
 
-/* Sign up display */
+/* Sign in*/
 #signup {
   display: none;
-
 }
 
-/* Sign in display*/
 #signin {
   display: none;
 }
 
 /* resualt style*/
+
 /* Pass Result Section Styles */
 .res {
   background-color: var(--background-color);
+  min-height: 100vh;
+  /* display: none; Hidden by default */
 }
 
 .res h1 {
   color: var(--heading-color);
+  font-size: 2.5rem;
+  font-weight: 600;
+  position: relative;
+  margin-bottom: 2rem;
 }
 
+.res h1::after {
+  /* content: ""; */
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border-radius: 3px;
+}
 
 .res .img-fluid {
   max-width: 300px;
@@ -477,32 +527,64 @@ main {
 
 .res p {
   color: var(--text-color);
+  margin-bottom: 1rem;
 }
 
 .res span.fw-bold {
   color: #300778;
+  font-size: 1em;
 }
 
 [data-theme="dark"] .res span.fw-bold {
   color: #dbd6e3;
 }
 
-
-
-/* Responsive adjustments for font size*/
-@media (min-width: 577px) {
-  .fs-md-4 {
-    font-size: 1.5rem !important;
+/* Animation for the result section */
+/* @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-
-  .fs-md-3 {
-    font-size: 2rem !important;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+.res.show {
+  display: block;
+  animation: fadeIn 0.5s ease-out forwards;
+} */
 
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .res h1 {
+    font-size: 1.7rem;
+  }
 
-/*Display of result*/
+  .res .img-fluid {
+    max-width: 250px;
+  }
+
+  .res p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .res h1 {
+    font-size: 1rem;
+  }
+
+  .res .img-fluid {
+    max-width: 150px;
+  }
+
+  .res p {
+    font-size: 0.5rem;
+  }
+}
+
 #pass-res {
   display: none;
 }
@@ -545,7 +627,7 @@ main {
 } */
 
 #start-ex {
-  display: block;
+  display: none;
 }
 
 /* Quiz Section */
@@ -693,7 +775,8 @@ main {
   /* Enlarge button */
 }
 
-.flagged-questions {
+.flagged-questions,
+.quiz-timer {
   background-color: var(--section-bg-dark);
   /* Light background for flagged questions */
   border-radius: 10px;
