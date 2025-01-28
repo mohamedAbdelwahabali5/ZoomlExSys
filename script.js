@@ -277,6 +277,7 @@ $(document).ready(function () {
     let selectedQuestions = [];
     let currentIndex = 0;
     let userAnswers = {};
+    let flaggedQuestions = {}; // Object to track flagged questions
     async function fetchData(apiLink) {
       console.log("fetchData called");
       try {
@@ -299,7 +300,7 @@ $(document).ready(function () {
     }
     // Function to display the current question
     function displayQuestion() {
-      const question = selectedQuestions[currentIndex]; // Use currentIndex --> obj
+      const question = selectedQuestions[currentIndex]; // Use currentIndex
       $(".quiz-card h5").text(`${currentIndex + 1}. ${question.question}`); // Update question
       $(".form-check").each(function (i) {
         $(this)
@@ -317,6 +318,13 @@ $(document).ready(function () {
           userAnswers[currentIndex] === $(this).attr("id").replace("option", "")
         );
       });
+
+      // Check if the current question is flagged and update the flag button appearance
+      if (flaggedQuestions[question.id]) {
+        $("#flag").find("i").addClass("flag-red");
+      } else {
+        $("#flag").find("i").removeClass("flag-red");
+      }
 
       // Disable navigation buttons if at the ends
       $(".quiz-nav[title='Go to Previous']").prop(
@@ -347,14 +355,16 @@ $(document).ready(function () {
       .off("click")
       .on("click", function () {
         let currQues = selectedQuestions[currentIndex]; // Get the current question
-        const isFlagged =
-          $("#flagged-list").find(`#flagged-${currQues.id}`).length > 0; // Check if already flagged
+        const isFlagged = flaggedQuestions[currQues.id]; // Check if already flagged
 
         if (!isFlagged) {
           // Add question to flagged list
+          flaggedQuestions[currQues.id] = true; // Mark as flagged
           $("#flagged-list").append(`
         <li id="flagged-${currQues.id}" class="fs-6 fs-sm-5">
-          ${currQues.question}
+          Question ${
+            selectedQuestions.findIndex((q) => q.id === currQues.id) + 1
+          }
           <button class="btn btn-link text-danger remove-flag" title="Remove this question">
             <i class="bi bi-trash"></i>
           </button>
@@ -363,6 +373,7 @@ $(document).ready(function () {
           $(this).find("i").addClass("flag-red"); // Change flag button appearance
         } else {
           // Remove question from flagged list
+          delete flaggedQuestions[currQues.id]; // Unmark as flagged
           $(`#flagged-${currQues.id}`).remove();
           $(this).find("i").removeClass("flag-red"); // Reset flag button appearance
         }
@@ -372,9 +383,11 @@ $(document).ready(function () {
     // removing flagged questions
     $("#flagged-list").on("click", ".remove-flag", function () {
       const questionId = $(this).parent().attr("id").replace("flagged-", "");
-      $(`#flagged-${questionId}`).remove();
+      $(`#flagged-${questionId}`).remove(); // Remove question from flagged list
+      delete flaggedQuestions[questionId]; // Unmark as flagged
+
       // Reset flag button state if the current question is unflagged
-      if (currQues.id == questionId) {
+      if (selectedQuestions[currentIndex].id == questionId) {
         $("#flag").find("i").removeClass("flag-red");
       }
     });
