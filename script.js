@@ -127,44 +127,6 @@ function inputsComparing(userEmail, userPassword) {
   return isValid;
 }
 
-/**------------------------------------ */
-// Function to get random questions
-function getRandomQuestions(array, count) {
-  const randumized = array.sort(() => 0.5 - Math.random());
-  return randumized.slice(0, count);
-}
-// Function to fetch data from API
-var _count = 5;
-async function fetchData(apiLink) {
-  console.log("fetchData called");
-  try {
-    const response = await fetch(apiLink);
-    if (!response.ok) {
-      throw new Error("No Data Found");
-    }
-    const data = await response.json(); // get all question
-    const randomQuestions = getRandomQuestions(data, _count); // return random question
-    return randomQuestions;
-  } catch (error) {
-    console.error("Error:", error);
-    return [];
-  }
-}
-
-// Function to display Question
-function displayQuestion(index, questions) {
-  const question = questions[index]; // object
-  $(".quiz-card h5").text(`${index + 1}. ${question.question}`);
-  $(".form-check").each(function (i) {
-    $(this)
-      .find("input")
-      .attr("value", `${String.fromCharCode(65 + i)}`);
-    $(this)
-      .find("span")
-      .text(question[String.fromCharCode(65 + i)]);
-  });
-}
-
 $(document).ready(function () {
   // Initially hide signup and signin sections
   $("#signup").hide();
@@ -279,92 +241,127 @@ $(document).ready(function () {
   $("#signup").hide();
   $("#signin").hide();
   $("#hero").hide();
-  $("#quiz-section").show();
+  $("#quiz-section").hide();
+  $("#start-ex").show();
+
+  /**----------------quiz section -------------------- */
   //
 
-  //$("#startEx").on("click", function (e) {
-  $("#quiz-section").show();
-  $("#start-ex").hide();
-  // const startExamBtn = document.getElementById("start-ex-btn");
-  const timer = document.getElementById("timer");
-  let exCounter = 60; // five minutes
-  let interval = setInterval(() => {
-    let seconds = Math.floor(exCounter % 60);
-    let minutes = Math.floor(exCounter / 60);
-    if (exCounter < 30) {
-      timer.style.color = "red";
+  $("#startEx").on("click", function (e) {
+    $("#start-ex").hide();
+    $("#quiz-section").show();
+    // const startExamBtn = document.getElementById("start-ex-btn");
+    // Timer Logic
+    const timer = document.getElementById("timer");
+    let exCounter = 60; // five minutes
+    let interval = setInterval(() => {
+      let seconds = Math.floor(exCounter % 60);
+      let minutes = Math.floor(exCounter / 60);
+      if (exCounter < 30) {
+        timer.style.color = "red";
+      }
+      if (exCounter <= 0) {
+        timer.innerText = "00:00";
+        clearInterval(interval);
+        //go to the timeout page
+        $("#start-ex").hide();
+        $("#timeout").show();
+      }
+      timer.innerText = `${minutes.toString().padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}`;
+      exCounter--;
+    }, 1000);
+
+    // Function to fetch data from API
+    let selectedQuestions = [];
+    let currentIndex = 0;
+    let userAnswers = {};
+    async function fetchData(apiLink) {
+      console.log("fetchData called");
+      try {
+        const response = await fetch(apiLink);
+        if (!response.ok) {
+          throw new Error("No Data Found");
+        }
+        const data = await response.json(); // Get all questions
+        selectedQuestions = getRandomQuestions(data, 5); // Return random questions
+        displayQuestion(); // Display the first question
+      } catch (error) {
+        console.error("Error:", error);
+        return [];
+      }
     }
-    if (exCounter <= 0) {
-      timer.innerText = "00:00";
-      clearInterval(interval);
-      //go to the timeout page
-      $("#start-ex").hide();
-      $("#timeout").show();
+    // Function to get random questions
+    function getRandomQuestions(array, count) {
+      const randomized = array.sort(() => 0.5 - Math.random());
+      return randomized.slice(0, count);
     }
-    timer.innerText = `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
-    exCounter--;
-  }, 1000);
+    // Function to display the current question
+    function displayQuestion() {
+      const question = selectedQuestions[currentIndex]; // Use currentIndex --> obj
+      $(".quiz-card h5").text(`${currentIndex + 1}. ${question.question}`); // Update question
+      $(".form-check").each(function (i) {
+        $(this)
+          .find("input")
+          .attr("value", `${String.fromCharCode(65 + i)}`);
+        $(this)
+          .find("span")
+          .text(question[String.fromCharCode(65 + i)]);
+      });
 
-  //fetching data from API
-  let currentQuestionIndex = 0;
-  let answers = [];
-  fetchData("questions.json").then((questions) => {
-    console.log(questions);
-    displayQuestion(currentQuestionIndex, questions);
+      // const flagged = $("#flag").find("i");
+      // if (currentQuestion.isFlagged) {
+      //   flagIcon.addClass("flag-red");
+      // } else {
+      //   flagIcon.removeClass("flag-red");
+      // }
 
-    //hide Previous and Submit Buttons at the starting
-    $("#previous-btn").hide();
-    $("#submit-btn").hide();
+      // Restore previously selected answer
+      $('input[name="answer"]').each(function () {
+        $(this).prop(
+          "checked",
+          userAnswers[currentIndex] === $(this).attr("id").replace("option", "")
+        );
+      });
 
-    //next Button logic
-    $("#next-btn").on("click", function (e) {
-      $("#previous-btn").show();
-      if (currentQuestionIndex == _count - 2) {
-        $("#next-btn").hide();
-        $("#submit-btn").show();
-      } else {
-        $("#next-btn").show();
-        $("#submit-btn").hide();
+      // Disable navigation buttons if at the ends
+      $(".quiz-nav[title='Go to Previous']").prop(
+        "disabled",
+        currentIndex === 0
+      );
+      $(".quiz-nav[title='Go to Next']").prop(
+        "disabled",
+        currentIndex === selectedQuestions.length - 1
+      );
+      $(".btn-submit").toggle(currentIndex === selectedQuestions.length - 1);
+    }
+
+    fetchData("questions.json"); // Adjust the path to your questions file
+    //handle next prev logic
+
+    $(".quiz-nav").on("click", function () {
+      const isNext = $(this).attr("title") === "Go to Next";
+      if (isNext && currentIndex < selectedQuestions.length - 1) {
+        currentIndex++;
+      } else if (!isNext && currentIndex > 0) {
+        currentIndex--;
       }
-      if (currentQuestionIndex < questions.length - 1) {
-        currentQuestionIndex++;
-        displayQuestion(currentQuestionIndex, questions);
-      }
-      console.log(currentQuestionIndex);
+
+      displayQuestion();
     });
 
-    //Previous Button logic
-    $("#previous-btn").on("click", function (e) {
-      $("#next-btn").show();
-      if (currentQuestionIndex == 1) {
-        $("#previous-btn").hide();
-      } else {
-        $("#previous-btn").show();
-      }
-      if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        displayQuestion(currentQuestionIndex, questions);
-      }
+    // Save user answers
+    $("input[name='answer']").on("change", function () {
+      userAnswers[currentIndex] = this.id.replace("option", "");
     });
 
-    //select choice logic
-    $(".form-check").on("click", function (e) {
-      answers[currentQuestionIndex] = $(this).find("input").attr("value");
-      // console.log($(this).find("span").text());
-      console.log(answers);
-
-      //handle active selection
-      // $(".form-check").removeClass("active");
-      // $(this).addClass("active");
-    });
-
-    //select choice logic
+    // Handle submit logic
     $("#submit-btn").on("click", function (e) {
+      e.preventDefault(); // Prevent default form submission
       let counter = 0;
-      questions.forEach(function (question, i) {
-        if (question.answer == answers[i]) {
+      selectedQuestions.forEach(function (question, i) {
+        if (question.answer === userAnswers[i]) {
           counter++;
         }
       });
@@ -374,12 +371,12 @@ $(document).ready(function () {
       console.log(user);
 
       if (counter >= 5) {
-        $("#succes-res").text(`${counter * 10}  %`);
+        $("#succes-res").text(`${counter * 10} %`);
         $("#succes-uname").text(`${user.userName}`);
         $("#start-ex").hide();
         $("#pass-res").show();
       } else {
-        $("#fail-res").text(`${counter * 10}  %`);
+        $("#fail-res").text(`${counter * 10} %`);
         $("#fail-uname").text(`${user.userName}`);
         $("#start-ex").hide();
         $("#fail-res").show();
