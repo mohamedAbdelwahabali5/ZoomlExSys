@@ -12,11 +12,6 @@ function clearErr(fieldId) {
     $(`#${fieldId}`).next(".err").remove(); // remove next for feild id
 }
 
-// function validateEmail(email) {
-//   //i put it in function because if found myself pass regext on if condition
-//   let regex =
-//   return regex.test(email);
-// }
 
 function inputValidation(input) {
     let fieldId = input.attr("id"); // get id attribute for eact input
@@ -134,6 +129,42 @@ function inputsComparing(userEmail, userPassword) {
     });
     return isValid;
 }
+
+// Function to get random questions
+function getRandomQuestions(array, count) {
+    const randumized = array.sort(() => 0.5 - Math.random());
+    return randumized.slice(0, count);
+}
+// Function to fetch data from API
+var _count = 5;
+async function fetchData(apiLink) {
+    console.log("fetchData called");
+    try {
+        const response = await fetch(apiLink);
+        if (!response.ok) {
+            throw new Error("No Data Found");
+        }
+        const data = await response.json();
+        const randomQuestions = getRandomQuestions(data, _count);
+        return randomQuestions;
+    } catch (error) {
+        console.error("Error:", error);
+        return [];
+    }
+}
+
+
+// Function to display Question
+function displayQuestion(index, questions) {
+    const question = questions[index]; // object
+    $(".quiz-card h5").text(`${index + 1}. ${question.question}`);
+    $(".form-check").each(function (i) {
+        $(this).find("input").attr("value", `${String.fromCharCode(65 + i)}`);
+        $(this).find("span").text(question[String.fromCharCode(65 + i)]);
+    });
+}
+
+
 $(document).ready(function () {
     // Initially hide signup and signin sections
     $("#signup").hide();
@@ -216,8 +247,115 @@ $(document).ready(function () {
         }
     });
 
-    $("#startEx").on("click", function (e) {
-        $("#quiz-section").show();
-        $("#start-ex").hide();
-    })
-});
+    //
+    $("#signup").hide();
+    $("#signin").hide();
+    $("#hero").hide();
+    $("#quiz-section").show();
+    //
+
+    //$("#startEx").on("click", function (e) {
+    $("#quiz-section").show();
+    $("#start-ex").hide();
+    // const startExamBtn = document.getElementById("start-ex-btn");
+    const timer = document.getElementById("timer");
+    let exCounter = 60; // five minutes
+    let interval = setInterval(() => {
+        let seconds = Math.floor(exCounter % 60);
+        let minutes = Math.floor(exCounter / 60);
+        if (exCounter < 30) {
+            timer.style.color = "red";
+        }
+        if (exCounter <= 0) {
+            timer.innerText = "00:00";
+            clearInterval(interval);
+            //go to the timeout page
+            $("#start-ex").hide();
+            $("#timeout").show();
+        }
+        timer.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        exCounter--;
+    }, 1000);
+
+    //fetching data from API
+    let currentQuestionIndex = 0;
+    let answers = [];
+    fetchData("questions.json").then(questions => {
+        console.log(questions);
+        displayQuestion(currentQuestionIndex, questions);
+
+        //hide Previous and Submit Buttons at the starting
+        $("#previous-btn").hide();
+        $("#submit-btn").hide();
+
+        //next Button logic
+        $("#next-btn").on("click", function (e) {
+            $("#previous-btn").show();
+            if (currentQuestionIndex == _count - 2) {
+                $("#next-btn").hide();
+                $("#submit-btn").show();
+            } else {
+                $("#next-btn").show();
+                $("#submit-btn").hide();
+            }
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex, questions);
+            }
+            console.log(currentQuestionIndex);
+        })
+
+        //Previous Button logic
+        $("#previous-btn").on("click", function (e) {
+            $("#next-btn").show();
+            if (currentQuestionIndex == 1) {
+                $("#previous-btn").hide();
+            } else {
+                $("#previous-btn").show();
+            }
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex, questions);
+            }
+        })
+
+        //select choice logic
+        $(".form-check").on("click", function (e) {
+            answers[currentQuestionIndex] = $(this).find("input").attr("value");
+            // console.log($(this).find("span").text());
+            console.log(answers);
+
+            //handle active selection
+            // $(".form-check").removeClass("active");
+            // $(this).addClass("active");
+        });
+
+        //select choice logic
+        $("#submit-btn").on("click", function (e) {
+            let counter = 0;
+            questions.forEach(function (question, i) {
+                if (question.answer == answers[i]) {
+                    counter++;
+                }
+            })
+            let searchEmail = $("#signinEmail").val();
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            let user = users.find(u => u.userEmail === searchEmail);
+            console.log(user);
+
+            if (counter >= 5) {
+
+                $("#succes-res").text(`${counter * 10}  %`);
+                $("#succes-uname").text(`${user.userName}`);
+                $("#start-ex").hide();
+                $("#pass-res").show();
+            } else {
+                $("#fail-res").text(`${counter * 10}  %`);
+                $("#fail-uname").text(`${user.userName}`);
+                $("#start-ex").hide();
+                $("#fail-res").show();
+            }
+
+        });
+    });
+})

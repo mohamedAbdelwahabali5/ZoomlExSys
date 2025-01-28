@@ -187,10 +187,10 @@
 
           <div class="col-12">
             <p class="fs-5">
-              Your Grade is <span class="fw-bold"> User Grade %</span>
+              Your Grade is <span id="succes-res" class="fw-bold"> User Grade %</span>
             </p>
             <p class="fs-5">
-              Congratulations <span class="fw-bold"> User Name </span>
+              Congratulations <span id="succes-uname" class="fw-bold"> User Name </span>
             </p>
           </div>
         </div>
@@ -210,9 +210,9 @@
           </div>
 
           <div class="col-12">
-            <p class="fs-5">Sorry <span class="fw-bold"> User Name </span></p>
+            <p class="fs-5">Sorry <span id="fail-uname" class="fw-bold"> User Name </span></p>
             <p class="fs-5">
-              Your Grade is <span class="fw-bold"> User Grade %</span>
+              Your Grade is <span id="fail-res" class="fw-bold"> User Grade %</span>
             </p>
             <p class="fs-5">
               This isn't the end—it's a chance to grow! Keep going and aim
@@ -360,17 +360,17 @@
             <div class="container d-flex justify-content-center align-items-center gap-3 mt-4">
               <div class="col-6 d-flex justify-content-first align-items-center gap-2">
                 <!-- Previous Button -->
-                <button type="button" class="btn quiz-nav" title="Go to Previous">
+                <button id="previous-btn" type="button" class="btn quiz-nav" title="Go to Previous">
                   <i class="bi bi-arrow-left"></i>
                 </button>
                 <!-- Next Button -->
-                <button type="button" class="btn quiz-nav" title="Go to Next">
+                <button id="next-btn" type="button" class="btn quiz-nav" title="Go to Next">
                   <i class="bi bi-arrow-right"></i>
                 </button>
               </div>
               <!-- Submit Button -->
               <div class="col-6 d-flex justify-content-end">
-                <button type="submit" class="btn-submit ms-auto" title="Submit Exam">
+                <button id="submit-btn" type="submit" class="btn-submit ms-auto" title="Submit Exam">
                   Submit
                 </button>
               </div>
@@ -411,26 +411,5 @@
   <script src="theme.js"></script>
   <script src="script.js"></script>
   <!-- script for test -->
-  <script>
-    const startExamBtn = document.getElementById("start-ex-btn");
-    const timer = document.getElementById("timer");
-    $(window).on("load", function (e) {
-      let exCounter = 60 * 5; // five minutes
-      let interval = setInterval(() => {
-        let seconds = Math.floor(exCounter % 60);
-        let minutes = Math.floor(exCounter / 60);
-        if (exCounter < 30) {
-          timer.style.color = "red";
-        }
-        if (exCounter == 0) {
-          timer.innerText = "00:00";
-          clearInterval(interval);
-          // go to result section
-        }
-        timer.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        exCounter--;
 
-      }, 1000);
-    })
-  </script>
 </body>
