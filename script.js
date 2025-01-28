@@ -361,7 +361,7 @@ s
       displayQuestion();
     });
     
-      $("#flag")
+        $("#flag")
       .off("click")
       .on("click", function () {
         let currQues = selectedQuestions[currentIndex]; // Get the current question
@@ -404,6 +404,7 @@ s
     // Save user answers and update usr answer
     $("input[name='answer']").on("change", function () {
       console.log(this.id);
+
       userAnswers[currentIndex] = this.id.replace("option", "");
     });
 
