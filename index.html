@@ -308,28 +308,22 @@
         <h2 class="text-center mb-4">General Knowledge Quiz</h2>
         <div class="row">
           <div class="col-md-4 col-sm-12 d-flex flex-column gap-3">
+            <div id="timer" class="quiz-timer text-center fs-1">05:00</div>
             <!-- Flagged Questions Section -->
             <div class="flagged-questions ">
               <h5 class="fs-4 fs-sm-5">Flagged Questions</h5>
               <ul id="flagged-list">
-                <li class="fs-6 fs-sm-5">
-                  <div>
-                    <p class="d-inline">First question</p>
-                    <button class="btn btn-link text-danger" title="Remove this question">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </div>
-                </li>
+               
               </ul>
             </div>
-            <div id="timer" class="quiz-timer text-center fs-1">05:00</div>
+           
           </div>
           <div class="col-md-8 col-sm-12 col-sm-12">
             <div class="quiz-card p-4 d-flex d-sm-flex justify-content-between">
               <div>
                 <h5 class="fs-4 fs-sm-5">1. What is the most abundant gas in the Earth's atmosphere?</h5>
               </div>
-              <button class="btn flag-btn p-0 ms-1" title="Flag this question">
+              <button id="flag" class="btn flag-btn p-0 ms-1" title="Flag this question">
                 <i class="bi bi-flag"></i>
               </button>
             </div>

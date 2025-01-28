@@ -53,10 +53,11 @@
   --section-bg-dark: #2e1065;
   /* Deeper violet section */
   --card-background: #9650c7;
-  --input-background: #dab7f5;
+  --input-background: #f3e9fb;
   --link-color: gray;
   --primary-color: #3810e9;
   --primary-hover: #41066a;
+  --text-color-dark: #7e22ce;
 }
 
 * {
@@ -216,9 +217,11 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg,
-      var(--background-color) 30%,
-      rgba(250, 245, 255, 0.85) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--background-color) 30%,
+    rgba(250, 245, 255, 0.85) 100%
+  );
   z-index: 1;
 }
 
@@ -251,9 +254,11 @@ main {
   }
 
   .hero::before {
-    background: linear-gradient(180deg,
-        var(--background-color) 40%,
-        rgba(250, 245, 255, 0.9) 100%);
+    background: linear-gradient(
+      180deg,
+      var(--background-color) 40%,
+      rgba(250, 245, 255, 0.9) 100%
+    );
   }
 
   .hero-content {
@@ -319,16 +324,20 @@ main {
 
 /* Dark mode adjustments */
 [data-theme="dark"] .hero::before {
-  background: linear-gradient(90deg,
-      var(--background-color) 30%,
-      rgba(46, 16, 101, 0.9) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--background-color) 30%,
+    rgba(46, 16, 101, 0.9) 100%
+  );
 }
 
 @media (max-width: 991.98px) {
   [data-theme="dark"] .hero::before {
-    background: linear-gradient(180deg,
-        var(--background-color) 40%,
-        rgba(46, 16, 101, 0.95) 100%);
+    background: linear-gradient(
+      180deg,
+      var(--background-color) 40%,
+      rgba(46, 16, 101, 0.95) 100%
+    );
   }
 }
 
@@ -416,7 +425,9 @@ main {
   background-color: var(--input-background);
   color: var(--text-color);
 }
-
+[data-theme="dark"] .auth-section .form-control {
+  color: var(--text-color-dark);
+}
 .auth-section .form-control:focus {
   border-color: #7c3aed;
 
@@ -687,12 +698,12 @@ main {
   color: var(--surface-color);
 }
 
-.form-check-input:checked+.form-check-label {
+.form-check-input:checked + .form-check-label {
   font-weight: bold;
   color: var(--accent-color);
 }
 
-[data-theme="dark"] .form-check-input:checked+.form-check-label {
+[data-theme="dark"] .form-check-input:checked + .form-check-label {
   font-weight: bold;
   color: var(--default-color);
 }
@@ -718,9 +729,11 @@ main {
 .quiz-nav {
   border-radius: 50%;
   padding: 0.5rem;
-  background: linear-gradient(145deg,
-      var(--accent-color),
-      var(--primary-hover));
+  background: linear-gradient(
+    145deg,
+    var(--accent-color),
+    var(--primary-hover)
+  );
   color: var(--contrast-color);
   border: none;
   transition: all 0.3s ease;
@@ -826,4 +839,12 @@ main {
   border-radius: 4px;
   padding: 8px 15px;
   transition: background-color 0.3s, color 0.3s;
+}
+
+.flag-red {
+  color: #dc3545;
+  /* Accent color for the flag */
+  font-size: 1.7rem;
+  /* Size of the icon */
+  cursor: pointer;
 }
