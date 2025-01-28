@@ -840,3 +840,11 @@ main {
   padding: 8px 15px;
   transition: background-color 0.3s, color 0.3s;
 }
+
+.flag-red {
+  color: #dc3545;
+  /* Accent color for the flag */
+  font-size: 1.7rem;
+  /* Size of the icon */
+  cursor: pointer;
+}

@@ -310,13 +310,6 @@ $(document).ready(function () {
           .text(question[String.fromCharCode(65 + i)]);
       });
 
-      // const flagged = $("#flag").find("i");
-      // if (currentQuestion.isFlagged) {
-      //   flagIcon.addClass("flag-red");
-      // } else {
-      //   flagIcon.removeClass("flag-red");
-      // }
-
       // Restore previously selected answer
       $('input[name="answer"]').each(function () {
         $(this).prop(
@@ -350,9 +343,45 @@ $(document).ready(function () {
 
       displayQuestion();
     });
+    $("#flag")
+      .off("click")
+      .on("click", function () {
+        let currQues = selectedQuestions[currentIndex]; // Get the current question
+        const isFlagged =
+          $("#flagged-list").find(`#flagged-${currQues.id}`).length > 0; // Check if already flagged
 
-    // Save user answers
+        if (!isFlagged) {
+          // Add question to flagged list
+          $("#flagged-list").append(`
+        <li id="flagged-${currQues.id}" class="fs-6 fs-sm-5">
+          ${currQues.question}
+          <button class="btn btn-link text-danger remove-flag" title="Remove this question">
+            <i class="bi bi-trash"></i>
+          </button>
+        </li>
+      `);
+          $(this).find("i").addClass("flag-red"); // Change flag button appearance
+        } else {
+          // Remove question from flagged list
+          $(`#flagged-${currQues.id}`).remove();
+          $(this).find("i").removeClass("flag-red"); // Reset flag button appearance
+        }
+
+        console.log(currQues.question); // Log the current question for debugging
+      });
+    // removing flagged questions
+    $("#flagged-list").on("click", ".remove-flag", function () {
+      const questionId = $(this).parent().attr("id").replace("flagged-", "");
+      $(`#flagged-${questionId}`).remove();
+      // Reset flag button state if the current question is unflagged
+      if (currQues.id == questionId) {
+        $("#flag").find("i").removeClass("flag-red");
+      }
+    });
+    // Save user answers and update usr answer
     $("input[name='answer']").on("change", function () {
+      console.log(this.id);
+
       userAnswers[currentIndex] = this.id.replace("option", "");
     });
 
