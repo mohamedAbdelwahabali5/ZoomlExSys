@@ -26,7 +26,7 @@
   <header id="header" class="header fixed-top">
     <nav class="navbar navbar-expand-lg navbar-light bg-light py-4">
       <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="">
           <h1 class="sitename">zoomlExSys</h1>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -36,10 +36,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
+              <a id="nav-about-id" class="nav-link" href="#"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#about">About</a>
+              <a class="nav-link" href="/">Home</a>
             </li>
           </ul>
           <div class="nav-item ms-3">
@@ -187,7 +187,7 @@
 
           <div class="col-12">
             <p class="fs-5">
-              Your Grade is <span id="succes-res" class="fw-bold"> User Grade %</span>
+              Your Grade is <span id="succes-res-span" class="fw-bold"> User Grade %</span>
             </p>
             <p class="fs-5">
               Congratulations <span id="succes-uname" class="fw-bold"> User Name </span>
@@ -212,7 +212,7 @@
           <div class="col-12">
             <p class="fs-5">Sorry <span id="fail-uname" class="fw-bold"> User Name </span></p>
             <p class="fs-5">
-              Your Grade is <span id="fail-res" class="fw-bold"> User Grade %</span>
+              Your Grade is <span id="fail-res-span" class="fw-bold"> User Grade %</span>
             </p>
             <p class="fs-5">
               This isn't the end—it's a chance to grow! Keep going and aim
@@ -240,7 +240,7 @@
 
           <div class="col-12">
             <p class="fs-5">
-              Your Grade is <span class="fw-bold"> User Grade %</span>
+              Your Grade is <span id="timeout-span" class="fw-bold"> User Grade %</span>
             </p>
           </div>
         </div>
@@ -336,22 +336,22 @@
             <div class="form mt-3">
               <form class="">
                 <label class="form-check">
-                  <input class="form-check-input" type="radio" name="answer" id="option1">
+                  <input class="form-check-input" type="radio" name="answer" id="optionA">
                   <span class="form-check-label">Nitrogen</span>
                 </label>
 
                 <label class="form-check">
-                  <input class="form-check-input" type="radio" name="answer" id="option2">
+                  <input class="form-check-input" type="radio" name="answer" id="optionB">
                   <span class="form-check-label">Helium</span>
                 </label>
 
                 <label class="form-check">
-                  <input class="form-check-input" type="radio" name="answer" id="option3">
+                  <input class="form-check-input" type="radio" name="answer" id="optionC">
                   <span class="form-check-label">Oxygen</span>
                 </label>
 
                 <label class="form-check">
-                  <input class="form-check-input" type="radio" name="answer" id="option4">
+                  <input class="form-check-input" type="radio" name="answer" id="optionD">
                   <span class="form-check-label">Carbon Dioxide</span>
                 </label>
               </form>

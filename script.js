@@ -1,4 +1,3 @@
-
 function showErr(fieldId, msg) {
     if (!$(`#${fieldId}`).next(".err").length) {
         // check if no err after feildid to prevent dupliction of err
@@ -11,7 +10,6 @@ function showErr(fieldId, msg) {
 function clearErr(fieldId) {
     $(`#${fieldId}`).next(".err").remove(); // remove next for feild id
 }
-
 
 function inputValidation(input) {
     let fieldId = input.attr("id"); // get id attribute for eact input
@@ -83,7 +81,8 @@ function inputValidation(input) {
     return isValid;
 }
 
-function formValidation(form) { // form can be signin or signup
+function formValidation(form) {
+    // form can be signin or signup
     $(".err").remove();
     let isValid = true;
     let inputs = {
@@ -104,7 +103,7 @@ function formValidation(form) { // form can be signin or signup
 }
 
 ///Saving user information
-function saveUserData(userName, userEmail, userPassword) {
+function saveUserData(firstName, lastName, userEmail, userPassword) {
     let users = JSON.parse(localStorage.getItem("users")) || [];
     let isexist = false;
     users.forEach(function (user) {
@@ -112,13 +111,17 @@ function saveUserData(userName, userEmail, userPassword) {
             isexist = true;
     });
     if (!isexist) {
-        users.push({ userName, userEmail, userPassword });
+        users.push({
+            firstName,
+            lastName,
+            fullName: `${firstName} ${lastName}`,
+            userEmail,
+            userPassword
+        });
         localStorage.setItem("users", JSON.stringify(users));
     }
     return isexist;
 }
-
-
 //compare between sign in and signup
 function inputsComparing(userEmail, userPassword) {
     let users = JSON.parse(localStorage.getItem("users")) || [];
@@ -129,41 +132,6 @@ function inputsComparing(userEmail, userPassword) {
     });
     return isValid;
 }
-
-// Function to get random questions
-function getRandomQuestions(array, count) {
-    const randumized = array.sort(() => 0.5 - Math.random());
-    return randumized.slice(0, count);
-}
-// Function to fetch data from API
-var _count = 5;
-async function fetchData(apiLink) {
-    console.log("fetchData called");
-    try {
-        const response = await fetch(apiLink);
-        if (!response.ok) {
-            throw new Error("No Data Found");
-        }
-        const data = await response.json();
-        const randomQuestions = getRandomQuestions(data, _count);
-        return randomQuestions;
-    } catch (error) {
-        console.error("Error:", error);
-        return [];
-    }
-}
-
-
-// Function to display Question
-function displayQuestion(index, questions) {
-    const question = questions[index]; // object
-    $(".quiz-card h5").text(`${index + 1}. ${question.question}`);
-    $(".form-check").each(function (i) {
-        $(this).find("input").attr("value", `${String.fromCharCode(65 + i)}`);
-        $(this).find("span").text(question[String.fromCharCode(65 + i)]);
-    });
-}
-
 
 $(document).ready(function () {
     // Initially hide signup and signin sections
@@ -195,10 +163,11 @@ $(document).ready(function () {
         if (formValidation("signup")) {
             console.log("signuup success");
             //saving user information in local storage
-            let uName = $("#signupFirstName").val().trim();
+            let firstName = $("#signupFirstName").val().trim();
+            let lastName = $("#signupLastName").val().trim();
             let uEmail = $("#signupEmail").val().trim();
             let upass = $("#signupPassword").val().trim();
-            let isValid = saveUserData(uName, uEmail, upass);
+            let isValid = saveUserData(firstName, lastName, uEmail, upass);
             if (!isValid) {
                 $("#signup").hide();
                 $("#signin").show();
@@ -206,10 +175,9 @@ $(document).ready(function () {
                 Swal.fire({
                     title: "Registeration Process success You Can Login Now",
                     icon: "success",
-                    draggable: true
+                    draggable: true,
                 });
             }
-
         } else {
             // Trigger validation for all inputs to ensure errors are displayed
             $("#signup input").each(function () {
@@ -218,6 +186,8 @@ $(document).ready(function () {
         }
     });
 
+
+
     $("#signin form").on("submit", function (e) {
         e.preventDefault();
         if (formValidation("signin")) {
@@ -225,13 +195,30 @@ $(document).ready(function () {
             let uEmail = $("#signinEmail").val().trim();
             let upass = $("#signinPassword").val().trim();
             let isValid = inputsComparing(uEmail, upass);
+
+            // Get and store user data
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            let currentUser = users.find(u => u.userEmail === uEmail);
+
+            console.log(users);
+            console.log(currentUser);
+            // console.log(currentUser.userName);
+
+            $("#nav-about-id").text(currentUser.fullName);
+
+            console.log(currentUser.fullName);
+
+            $("#quiz-section").append(`
+                <input type="hidden" id="currentUserName" 
+                value="${currentUser.fullName}">
+            `);
             if (isValid) {
                 $("#signin").hide();
                 $("#start-ex").show();
                 Swal.fire({
                     title: "Login Successfully",
                     icon: "success",
-                    draggable: true
+                    draggable: true,
                 });
             } else {
                 Swal.fire({
@@ -248,114 +235,192 @@ $(document).ready(function () {
     });
 
     //
-    $("#signup").hide();
-    $("#signin").hide();
-    $("#hero").hide();
-    $("#quiz-section").show();
+    // $("#signup").hide();
+    // $("#signin").hide();
+    // $("#hero").hide();
+    // $("#quiz-section").hide();
+    // $("#start-ex").show();
+
+    /**----------------quiz section -------------------- */
     //
 
-    //$("#startEx").on("click", function (e) {
-    $("#quiz-section").show();
-    $("#start-ex").hide();
-    // const startExamBtn = document.getElementById("start-ex-btn");
-    const timer = document.getElementById("timer");
-    let exCounter = 60; // five minutes
-    let interval = setInterval(() => {
-        let seconds = Math.floor(exCounter % 60);
-        let minutes = Math.floor(exCounter / 60);
-        if (exCounter < 30) {
-            timer.style.color = "red";
+    $("#startEx").on("click", function (e) {
+        let selectedQuestions = [];
+        let currentIndex = 0;
+        let userAnswers = {};
+        $("#start-ex").hide();
+        $("#quiz-section").show();
+        // Timer Logic
+        const timer = document.getElementById("timer");
+        let exCounter = 5; // five minutes
+        const fullName = $("#currentUserName").val();
+
+        let interval = setInterval(() => {
+            let seconds = Math.floor(exCounter % 60);
+            let minutes = Math.floor(exCounter / 60);
+            if (exCounter < 30) {
+                timer.style.color = "red";
+            }
+            if (exCounter <= 0) {
+                let counter = 0;
+                selectedQuestions.forEach(function (question, i) {
+                    if (question.answer === userAnswers[i]) {
+                        counter++;
+                    }
+                });
+
+                timer.innerText = "00:00";
+                clearInterval(interval);
+                //go to the timeout page
+                $("#timeout-span").text(`${counter * 10} %`);
+                $("#timeout").show();
+                $("#quiz-section").hide();
+            }
+            timer.innerText = `${minutes.toString().padStart(2, "0")}:${seconds
+                .toString()
+                .padStart(2, "0")}`;
+            exCounter--;
+        }, 1000);
+
+        // Function to fetch data from API
+
+        async function fetchData(apiLink) {
+            console.log("fetchData called");
+            try {
+                const response = await fetch(apiLink);
+                if (!response.ok) {
+                    throw new Error("No Data Found");
+                }
+                const data = await response.json(); // Get all questions
+                selectedQuestions = getRandomQuestions(data, 5); // Return random questions
+                displayQuestion(); // Display the first question
+            } catch (error) {
+                console.error("Error:", error);
+                return [];
+            }
         }
-        if (exCounter <= 0) {
-            timer.innerText = "00:00";
-            clearInterval(interval);
-            //go to the timeout page
-            $("#start-ex").hide();
-            $("#timeout").show();
+        // Function to get random questions
+        function getRandomQuestions(array, count) {
+            const randomized = array.sort(() => 0.5 - Math.random());
+            return randomized.slice(0, count);
         }
-        timer.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        exCounter--;
-    }, 1000);
+        // Function to display the current question
+        function displayQuestion() {
+            const question = selectedQuestions[currentIndex]; // Use currentIndex --> obj
+            $(".quiz-card h5").text(`${currentIndex + 1}. ${question.question}`); // Update question
+            $(".form-check").each(function (i) {
+                $(this)
+                    .find("input")
+                    .attr("value", `${String.fromCharCode(65 + i)}`);
+                $(this)
+                    .find("span")
+                    .text(question[String.fromCharCode(65 + i)]);
+            });
 
-    //fetching data from API
-    let currentQuestionIndex = 0;
-    let answers = [];
-    fetchData("questions.json").then(questions => {
-        console.log(questions);
-        displayQuestion(currentQuestionIndex, questions);
+            // Restore previously selected answer
+            $('input[name="answer"]').each(function () {
+                $(this).prop(
+                    "checked",
+                    userAnswers[currentIndex] === $(this).attr("id").replace("option", "")
+                );
+            });
 
-        //hide Previous and Submit Buttons at the starting
-        $("#previous-btn").hide();
-        $("#submit-btn").hide();
+            // Disable navigation buttons if at the ends
+            $(".quiz-nav[title='Go to Previous']").prop(
+                "disabled",
+                currentIndex === 0
+            );
+            $(".quiz-nav[title='Go to Next']").prop(
+                "disabled",
+                currentIndex === selectedQuestions.length - 1
+            );
+            $(".btn-submit").toggle(currentIndex === selectedQuestions.length - 1);
+        }
 
-        //next Button logic
-        $("#next-btn").on("click", function (e) {
-            $("#previous-btn").show();
-            if (currentQuestionIndex == _count - 2) {
-                $("#next-btn").hide();
-                $("#submit-btn").show();
-            } else {
-                $("#next-btn").show();
-                $("#submit-btn").hide();
+        fetchData("questions.json"); // Adjust the path to your questions file
+        //handle next prev logic
+
+        $(".quiz-nav").on("click", function () {
+            const isNext = $(this).attr("title") === "Go to Next";
+            if (isNext && currentIndex < selectedQuestions.length - 1) {
+                currentIndex++;
+            } else if (!isNext && currentIndex > 0) {
+                currentIndex--;
             }
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                displayQuestion(currentQuestionIndex, questions);
-            }
-            console.log(currentQuestionIndex);
-        })
 
-        //Previous Button logic
-        $("#previous-btn").on("click", function (e) {
-            $("#next-btn").show();
-            if (currentQuestionIndex == 1) {
-                $("#previous-btn").hide();
-            } else {
-                $("#previous-btn").show();
-            }
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                displayQuestion(currentQuestionIndex, questions);
-            }
-        })
+            displayQuestion();
+        });
+        $("#flag")
+            .off("click")
+            .on("click", function () {
+                let currQues = selectedQuestions[currentIndex]; // Get the current question
+                const isFlagged =
+                    $("#flagged-list").find(`#flagged-${currQues.id}`).length > 0; // Check if already flagged
 
-        //select choice logic
-        $(".form-check").on("click", function (e) {
-            answers[currentQuestionIndex] = $(this).find("input").attr("value");
-            // console.log($(this).find("span").text());
-            console.log(answers);
+                if (!isFlagged) {
+                    // Add question to flagged list
+                    $("#flagged-list").append(`
+          <li id="flagged-${currQues.id}" class="fs-6 fs-sm-5">
+            ${currQues.question}
+            <button class="btn btn-link text-danger remove-flag" title="Remove this question">
+              <i class="bi bi-trash"></i>
+            </button>
+          </li>
+        `);
+                    $(this).find("i").addClass("flag-red"); // Change flag button appearance
+                } else {
+                    // Remove question from flagged list
+                    $(`#flagged-${currQues.id}`).remove();
+                    $(this).find("i").removeClass("flag-red"); // Reset flag button appearance
+                }
 
-            //handle active selection
-            // $(".form-check").removeClass("active");
-            // $(this).addClass("active");
+                console.log(currQues.question); // Log the current question for debugging
+            });
+        // removing flagged questions
+        $("#flagged-list").on("click", ".remove-flag", function () {
+            const questionId = $(this).parent().attr("id").replace("flagged-", "");
+            $(`#flagged-${questionId}`).remove();
+            // Reset flag button state if the current question is unflagged
+            if (currQues.id == questionId) {
+                $("#flag").find("i").removeClass("flag-red");
+            }
+        });
+        // Save user answers and update usr answer
+        $("input[name='answer']").on("change", function () {
+            console.log(this.id);
+            userAnswers[currentIndex] = this.id.replace("option", "");
         });
 
-        //select choice logic
+        // Handle submit logic
         $("#submit-btn").on("click", function (e) {
+            e.preventDefault(); // Prevent default form submission
             let counter = 0;
-            questions.forEach(function (question, i) {
-                if (question.answer == answers[i]) {
+            console.log(userAnswers);
+            console.log(selectedQuestions);
+
+            selectedQuestions.forEach(function (question, i) {
+                if (question.answer === userAnswers[i]) {
                     counter++;
                 }
-            })
-            let searchEmail = $("#signinEmail").val();
-            let users = JSON.parse(localStorage.getItem("users")) || [];
-            let user = users.find(u => u.userEmail === searchEmail);
-            console.log(user);
+            });
 
-            if (counter >= 5) {
+            // Get user name from hidden field
+            const fullName = $("#currentUserName").val();
 
-                $("#succes-res").text(`${counter * 10}  %`);
-                $("#succes-uname").text(`${user.userName}`);
-                $("#start-ex").hide();
+            console.log(counter);
+            if (counter <= 5) {
+                console.log("successsss");
+                $("#succes-res-span").text(`${counter * 10} %`);
+                $("#succes-uname").text(`${fullName}`);
+                $("#quiz-section").hide();
                 $("#pass-res").show();
             } else {
-                $("#fail-res").text(`${counter * 10}  %`);
-                $("#fail-uname").text(`${user.userName}`);
-                $("#start-ex").hide();
+                console.log("fialeeeeed");
+                $("#fail-res-span").text(`${counter * 10} %`);
+                $("#fail-uname").text(`${fullName}`);
+                $("#quiz-section").hide();
                 $("#fail-res").show();
             }
-
         });
     });
-})
+});
