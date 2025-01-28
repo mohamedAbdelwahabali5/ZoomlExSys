@@ -108,7 +108,7 @@ function formValidation(form) { // form can be signin or signup
     return isValid;
 }
 
-//Saving user information
+///Saving user information
 function saveUserData(userName, userEmail, userPassword) {
     let users = JSON.parse(localStorage.getItem("users")) || [];
     let isexist = false;
@@ -173,8 +173,9 @@ $(document).ready(function () {
                 $("#signin").show();
             } else {
                 Swal.fire({
-                    icon: "error",
-                    title: "User Is Already Exist!",
+                    title: "Registeration Process success You Can Login Now",
+                    icon: "success",
+                    draggable: true
                 });
             }
 
@@ -196,8 +197,12 @@ $(document).ready(function () {
             if (isValid) {
                 $("#signin").hide();
                 $("#start-ex").show();
+                Swal.fire({
+                    title: "Login Successfully",
+                    icon: "success",
+                    draggable: true
+                });
             } else {
-                // showErr(fieldId, "User Not Found");
                 Swal.fire({
                     icon: "error",
                     title: "User Not Found!",
@@ -210,4 +215,9 @@ $(document).ready(function () {
             });
         }
     });
+
+    $("#startEx").on("click", function (e) {
+        $("#quiz-section").show();
+        $("#start-ex").hide();
+    })
 });
