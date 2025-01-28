@@ -740,6 +740,7 @@ main {
 }
 
 /* Submit Button Styling */
+.res .btn,
 .btn-submit {
   background: linear-gradient(var(--accent-color), var(--primary-hover));
   color: var(--contrast-color);
