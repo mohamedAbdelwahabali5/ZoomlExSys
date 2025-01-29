@@ -397,7 +397,7 @@ $(document).ready(function () {
       // Get user name from hidden field
       const fullName = $("#currentUserName").val();
 
-      if (counter <= 5) {
+      if (counter >= 5) {
         $("#succes-res-span").text(`${counter * 10} %`);
         $("#succes-uname").text(`${fullName}`);
         $("#quiz-section").hide();
