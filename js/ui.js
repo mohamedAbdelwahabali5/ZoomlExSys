@@ -1,3 +1,7 @@
+import { inputValidation, formValidation } from './validation.js';
+import { saveUserData, inputsComparing } from './userManagement.js';
+import { resetQuiz } from './quiz.js';
+
 export function initializeUI() {
     $("#signup").hide();
     $("#signin").hide();
