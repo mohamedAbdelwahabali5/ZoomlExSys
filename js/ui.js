@@ -5,7 +5,6 @@ import { resetQuiz } from "./quiz.js";
 export function initializeUI() {
   $("#signup").hide();
   $("#signin").hide();
-  $("#logout-link").hide(); // Initially hide the logout link
 
   $(".toggle-section").on("click", function (e) {
     e.preventDefault();
@@ -71,11 +70,10 @@ export function initializeUI() {
         let currentUser = users.find((u) => u.userEmail === uEmail);
 
         $("#nav-about-id").text(currentUser.fullName);
-        // $("#logout-link").show(); // Show the logout link when logged in
 
         $("#quiz-section").append(`
                 <input type="hidden" id="currentUserName" value="${currentUser.fullName}">
-            `);
+         `);
 
         $("#signin").hide();
         $("#start-ex").show();

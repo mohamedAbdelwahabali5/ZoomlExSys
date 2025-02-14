@@ -13,7 +13,7 @@ export function startQuiz() {
   $("#flagged-list").empty();
 
   const timer = document.getElementById("timer");
-  let exCounter = 60;
+  let exCounter = 60*5;
   const fullName = $("#currentUserName").val();
 
   if (window.quizInterval) {
@@ -27,16 +27,16 @@ export function startQuiz() {
       timer.style.color = "red";
     }
     if (exCounter <= 0) {
-      let counter = 0;
+      let grade = 0; ///grade
       selectedQuestions.forEach(function (question, i) {
         if (question.answer === userAnswers[i]) {
-          counter++;
+          grade++;
         }
       });
 
       timer.innerText = "00:00";
       clearInterval(window.quizInterval);
-      $("#timeout-span").text(`${counter * 10} %`);
+      $("#timeout-span").text(`${grade * 10} %`); 
       $("#timeout").show();
       $("#quiz-section").hide();
     }
@@ -53,7 +53,7 @@ export function startQuiz() {
         throw new Error("No Data Found");
       }
       const data = await response.json();
-      selectedQuestions = getRandomQuestions(data, 10);
+      selectedQuestions = getRandomQuestions(data, 10);  ///select 10 questions
       displayQuestion();
     } catch (error) {
       console.error("Error:", error);
@@ -61,6 +61,7 @@ export function startQuiz() {
     }
   }
 
+  
   function getRandomQuestions(array, count) {
     const randomized = array.sort(() => 0.5 - Math.random());
     return randomized.slice(0, count);
@@ -180,23 +181,23 @@ export function startQuiz() {
 
   $("#submit-btn").on("click", function (e) {
     e.preventDefault();
-    let counter = 0;
+    let grade = 0;
     isQuizActive = false;
     selectedQuestions.forEach(function (question, i) {
       if (question.answer === userAnswers[i]) {
-        counter++;
+        grade++;
       }
     });
 
     const fullName = $("#currentUserName").val();
 
-    if (counter >= 5) {
-      $("#succes-res-span").text(`${counter * 10} %`);
+    if (grade >= 5) {
+      $("#succes-res-span").text(`${grade * 10} %`);
       $("#succes-uname").text(`${fullName}`);
       $("#fail-res").hide();
       $("#pass-res").show();
     } else {
-      $("#fail-res-span").text(`${counter * 10} %`);
+      $("#fail-res-span").text(`${grade * 10} %`);
       $("#fail-uname").text(`${fullName}`);
       $("#pass-res").hide();
       $("#fail-res").show();
