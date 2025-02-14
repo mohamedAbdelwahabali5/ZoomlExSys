@@ -27,24 +27,36 @@ export function initializeUI() {
   $("#signup form").on("submit", function (e) {
     e.preventDefault();
     if (formValidation("signup")) {
+      let isExist = true;
       let firstName = $("#signupFirstName").val().trim();
       let lastName = $("#signupLastName").val().trim();
       let uEmail = $("#signupEmail").val().trim();
       let upass = $("#signupPassword").val().trim();
-      saveUserData(firstName, lastName, uEmail, upass);
+      isExist = saveUserData(firstName, lastName, uEmail, upass); //return true if already exist
 
-      Swal.fire({
-        title: "Registration Process success You Can Login Now",
-        icon: "success",
-        draggable: true,
+      if (isExist) {
+        Swal.fire({
+          title: "Registration Failed Try Again",
+          icon: "error",
+          draggable: true,
+        });
+        $("#signup").show();
+        $("#signin").hide();
+      } else {
+        Swal.fire({
+          title: "Registration Process success You Can Login Now",
+          icon: "success",
+          draggable: true,
+        });
+        $("#signup").hide();
+        $("#signin").show();
+      }
+      $("#signupForm").trigger("reset");
+    } else {
+      $("#signup input").each(function () {
+        inputValidation($(this));
       });
-      $("#signup").hide();
-      $("#signin").show();
     }
-
-    $("#signup input").each(function () {
-      inputValidation($(this));
-    });
   });
 
   $("#signin form").on("submit", function (e) {
@@ -59,7 +71,7 @@ export function initializeUI() {
         let currentUser = users.find((u) => u.userEmail === uEmail);
 
         $("#nav-about-id").text(currentUser.fullName);
-        $("#logout-link").show(); // Show the logout link when logged in
+        // $("#logout-link").show(); // Show the logout link when logged in
 
         $("#quiz-section").append(`
                 <input type="hidden" id="currentUserName" value="${currentUser.fullName}">

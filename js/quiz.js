@@ -13,7 +13,7 @@ export function startQuiz() {
   $("#flagged-list").empty();
 
   const timer = document.getElementById("timer");
-  let exCounter = 5 * 60;
+  let exCounter = 60;
   const fullName = $("#currentUserName").val();
 
   if (window.quizInterval) {
@@ -162,7 +162,7 @@ export function startQuiz() {
         title: "Exam in Progress",
         text: "You cannot navigate away from the exam until it is completed.",
       });
-      return; // Prevent further action
+      return;
     }
 
     if (currentUserName) {
@@ -173,7 +173,7 @@ export function startQuiz() {
       $(".res").hide();
       $("#start-ex").show(); // Redirect to Start Exam section
     } else {
-      // If not logged in, show the hero section
+      // If not logged in show the hero section
       $("#hero").show();
     }
   });
@@ -193,18 +193,17 @@ export function startQuiz() {
     if (counter >= 5) {
       $("#succes-res-span").text(`${counter * 10} %`);
       $("#succes-uname").text(`${fullName}`);
-      $("#quiz-section").hide();
       $("#fail-res").hide();
-      $("#start-ex").hide();
       $("#pass-res").show();
     } else {
       $("#fail-res-span").text(`${counter * 10} %`);
       $("#fail-uname").text(`${fullName}`);
-      $("#quiz-section").hide();
       $("#pass-res").hide();
-      $("#start-ex").hide();
       $("#fail-res").show();
     }
+    $("#start-ex").hide();
+    $("#quiz-section").hide();
+    clearInterval(window.quizInterval);
   });
 }
 
